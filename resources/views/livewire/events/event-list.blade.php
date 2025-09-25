@@ -27,7 +27,7 @@
                     <flux:heading size="lg" level="3">{{ $event->title }}</flux:heading>
                     <flux:text class="mt-1 flex items-center gap-2">
                         <flux:icon.calendar class="w-4 h-4" />
-                        {{ \Carbon\Carbon::parse($event->date)->toFormattedDateString() }}
+                        {{ $event->formatted_date }}
                     </flux:text>
                     <flux:text class="mt-1 flex items-center gap-2">
                         <flux:icon.user class="w-4 h-4" />

@@ -3,7 +3,7 @@
     <flux:heading size="lg" level="2" class="mt-5">{{ $event->title }}</flux:heading>
     <flux:text class="mt-1 flex items-center gap-2">
         Date:
-        {{ \Carbon\Carbon::parse($event->date)->toFormattedDateString() }}
+        {{ $event->formatted_date }}
     </flux:text>
     <flux:text class="mt-1 flex items-center gap-2">
         Capacity: {{ $event->capacity }}
