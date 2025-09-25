@@ -7,27 +7,17 @@
             </x-slot>
         </flux:input>
 
-        <flux:dropdown>
-            <flux:button icon:trailing="chevron-down">
-                {{ ucfirst($filter) ?: 'Filter' }}
-            </flux:button>
+        <x-enum-dropdown
+            wire-model="filter"
+            enum="\App\Enums\Event\Filter"
+            :value="$filter"
+        />
 
-            <flux:menu>
-                <flux:menu.item wire:click="$set('filter', 'all')">All</flux:menu.item>
-                <flux:menu.item wire:click="$set('filter', 'upcoming')">Upcoming</flux:menu.item>
-                <flux:menu.item wire:click="$set('filter', 'past')">Past</flux:menu.item>
-            </flux:menu>
-        </flux:dropdown>
-
-        <flux:dropdown>
-            <flux:button icon:trailing="chevron-down">
-                Sort: {{ $sort === 'asc' ? 'Oldest first' : 'Newest first' }}
-            </flux:button>
-            <flux:menu>
-                <flux:menu.item wire:click="$set('sort', 'asc')">Oldest first</flux:menu.item>
-                <flux:menu.item wire:click="$set('sort', 'desc')">Newest first</flux:menu.item>
-            </flux:menu>
-        </flux:dropdown>
+        <x-enum-dropdown
+            wire-model="sort"
+            enum="\App\Enums\Event\Sort"
+            :value="$sort"
+        />
     </div>
 
     <div class="space-y-3">

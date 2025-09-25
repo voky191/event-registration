@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Events;
 
+use App\Enums\Event\Filter;
+use App\Enums\Event\Sort;
 use App\Models\Event;
-use Illuminate\Support\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,8 +13,10 @@ class EventList extends Component
     use WithPagination;
 
     public string $search = '';
-    public string $filter = 'all'; // all | upcoming | past
-    public string $sort = 'asc';   // asc | desc
+
+    public string $filter = Filter::All->value;
+
+    public string $sort = Sort::Asc->value;
 
     public function updating($field)
     {
@@ -22,29 +25,19 @@ class EventList extends Component
         }
     }
 
-    public function clear(): void
-    {
-        $this->reset('search');
-    }
-
-    public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+    public function render()
     {
         $query = Event::query();
 
-        // Search by title
-        if ($this->search !== '') {
-            $query->where('title', 'like', "%{$this->search}%");
-        }
+        $filter = Filter::from($this->filter);
 
-        // Filter by date
-        if ($this->filter === 'upcoming') {
-            $query->where('date', '>=', Carbon::today());
-        } elseif ($this->filter === 'past') {
-            $query->where('date', '<', Carbon::today());
-        }
+        match ($filter) {
+            Filter::Upcoming => $query->where('date', '>=', now()),
+            Filter::Past     => $query->where('date', '<', now()),
+            default          => null,
+        };
 
-        // Sort by date
-        $events = $query->orderBy('date', $this->sort)->paginate(6);
+        $events = $query->orderBy('date', Sort::from($this->sort)->value)->paginate(6);
 
         return view('livewire.events.event-list', compact('events'));
     }
