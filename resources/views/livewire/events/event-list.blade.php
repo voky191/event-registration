@@ -22,16 +22,25 @@
 
     <div class="space-y-3">
         @forelse ($events as $event)
-            <div class="p-3 border rounded-lg dark:border-gray-700 shadow-sm">
-                <flux:heading size="lg" level="3">{{ $event->title }}</flux:heading>
-                <flux:text class="mt-1 flex items-center gap-2">
-                    <flux:icon.calendar class="w-4 h-4" />
-                    {{ \Carbon\Carbon::parse($event->date)->toFormattedDateString() }}
-                </flux:text>
-                <flux:text class="mt-1 flex items-center gap-2">
-                    <flux:icon.user class="w-4 h-4" />
-                    Capacity: {{ $event->capacity }}
-                </flux:text>
+            <div class="p-3 border rounded-lg dark:border-gray-700 shadow-sm flex justify-between items-start">
+                <div>
+                    <flux:heading size="lg" level="3">{{ $event->title }}</flux:heading>
+                    <flux:text class="mt-1 flex items-center gap-2">
+                        <flux:icon.calendar class="w-4 h-4" />
+                        {{ \Carbon\Carbon::parse($event->date)->toFormattedDateString() }}
+                    </flux:text>
+                    <flux:text class="mt-1 flex items-center gap-2">
+                        <flux:icon.user class="w-4 h-4" />
+                        {{ $event->capacity }}
+                    </flux:text>
+                </div>
+
+                <flux:button
+                    as="a"
+                    href="{{ route('events.show', ['event' => $event]) }}"
+                >
+                    <flux:icon.eye class="w-5 h-5" />
+                </flux:button>
             </div>
         @empty
             <flux:text class="text-gray-500 dark:text-gray-400">
