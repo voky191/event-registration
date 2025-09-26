@@ -18,7 +18,7 @@
 
             <flux:input label="Email" type="email" wire:model.defer="email" />
 
-            <flux:input label="Phone" type="text" wire:model.defer="phone" />
+            <flux:input label="Phone" type="text" mask="(099) 999-9999" placeholder="(012) 345-6789" wire:model.defer="phone" />
 {{--            @error('phone') <p class="text-sm text-red-600">{{ $message }}</p> @enderror handle errors by myself if needed (:errorless="true")--}}
 
             <flux:button type="submit" variant="primary">Register</flux:button>
