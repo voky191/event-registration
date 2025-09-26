@@ -10,7 +10,7 @@
             Capacity: {{ $registrations->count() }}/{{ $event->capacity }}
         </flux:text>
 
-        @if($event->registration_allowed && $registrations->count() < $event->capacity)
+        @if($event->registration_allowed)
             <livewire:events.event-registration :event="$event" />
         @else
             <flux:heading size="lg" level="2" class="mt-5 text-red-400">Registration closed!</flux:heading>

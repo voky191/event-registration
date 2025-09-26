@@ -2,9 +2,11 @@
     <div class="flex flex-col sm:flex-row sm:items-center gap-3">
 
         <flux:input placeholder="Search by title…" wire:model.live="search">
-            <x-slot name="iconTrailing">
-                <flux:button size="sm" variant="subtle" icon="x-mark" class="-mr-1" wire:click="clear"/>
-            </x-slot>
+            @if($search)
+                <x-slot name="iconTrailing">
+                    <flux:button size="sm" variant="subtle" icon="x-mark" class="-mr-1" wire:click="clear"/>
+                </x-slot>
+            @endif
         </flux:input>
 
         <x-enum-dropdown

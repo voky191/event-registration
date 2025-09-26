@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Events;
 
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use App\Models\Event;
 use App\Models\Registration;
@@ -14,11 +17,20 @@ class EventRegistration extends Component
     public string $email = '';
     public string $phone = '';
 
-    protected array $rules = [
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'phone' => 'required|string|max:20',
-    ];
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('registrations')
+                    ->where(fn ($query) => $query->where('event_id', $this->event->id)),
+            ],
+            'phone' => 'nullable|string|max:20',
+        ];
+    }
 
     public function mount(Event $event)
     {
@@ -29,18 +41,36 @@ class EventRegistration extends Component
     {
         $this->validate();
 
-        Registration::create([
-            'event_id' => $this->event->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-        ]);
 
-        $this->reset(['name', 'email', 'phone']);
+        try {
+            DB::beginTransaction();
 
-        session()->flash('success', 'You have been registered successfully!');
+            $event = Event::where('id', $this->event->id)->lockForUpdate()->first();
 
-        $this->dispatch('registration-created');
+            $count = $event->registrations()->count();
+
+            if ($count >= $event->capacity) {
+                throw new Exception('Event is already full.');
+            }
+
+            Registration::create([
+                'event_id' => $this->event->id,
+                'name' => $this->name,
+                'email' => $this->email,
+                'phone' => $this->phone,
+            ]);
+
+            $this->reset(['name', 'email', 'phone']);
+
+            session()->flash('success', 'You have been registered successfully!');
+
+            $this->dispatch('registration-created');
+
+            DB::commit();
+        } catch (\Throwable $exception) {
+            DB::rollBack();
+            session()->flash('error', $exception->getMessage());
+        }
     }
 
 

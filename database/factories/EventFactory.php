@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Event;
+use App\Models\Registration;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,5 +23,19 @@ class EventFactory extends Factory
             'date' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
             'capacity' => $this->faker->numberBetween(5, 10),
         ];
+    }
+
+    public function withRegistrations(): self
+    {
+        return $this->afterCreating(function (Event $event) {
+            $max = $event->capacity;
+
+            $count = fake()->numberBetween(0, $max);
+
+            Registration::factory()
+                ->count($count)
+                ->for($event)
+                ->create();
+        });
     }
 }

@@ -25,9 +25,18 @@ class EventList extends Component
         }
     }
 
+    public function clear(): void
+    {
+        $this->reset('search');
+    }
+
     public function render()
     {
         $query = Event::query()->withCount('registrations');
+
+        if ($this->search !== '') {
+            $query->where('title', 'like', "%{$this->search}%");
+        }
 
         $filter = Filter::from($this->filter);
 
