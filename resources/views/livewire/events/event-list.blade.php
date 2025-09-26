@@ -31,7 +31,7 @@
                     </flux:text>
                     <flux:text class="mt-1 flex items-center gap-2">
                         <flux:icon.user class="w-4 h-4" />
-                        {{ $event->capacity }}
+                        {{ $event->registrations_count }}/{{ $event->capacity }}
                     </flux:text>
                 </div>
 

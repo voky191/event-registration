@@ -27,7 +27,7 @@ class EventList extends Component
 
     public function render()
     {
-        $query = Event::query();
+        $query = Event::query()->withCount('registrations');
 
         $filter = Filter::from($this->filter);
 

@@ -19,7 +19,7 @@ class EventFactory extends Factory
         return [
             'title' => $this->faker->sentence(3),
             'date' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
-            'capacity' => $this->faker->numberBetween(10, 100),
+            'capacity' => $this->faker->numberBetween(5, 10),
         ];
     }
 }

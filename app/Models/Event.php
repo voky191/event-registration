@@ -14,11 +14,20 @@ class Event extends Model
 
     protected $fillable = ['title', 'date', 'capacity'];
 
-    protected $appends = ['formatted_date'];
+    protected $appends = ['formatted_date', 'registration_allowed'];
 
     public function getFormattedDateAttribute(): string
     {
         return Carbon::parse($this->attributes['date'])->toFormattedDateString();
     }
 
+    public function getRegistrationAllowedAttribute(): string
+    {
+        return $this->attributes['date'] > now();
+    }
+
+    public function registrations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Registration::class);
+    }
 }
