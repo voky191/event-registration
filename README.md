@@ -31,4 +31,8 @@
 
 `sail artisan migrate --seed`
 
+- Run frontend build:
+
+`sail npm run dev`
+
 - Go to `http://localhost` (specify port in url if `APP_PORT` was changed in `.env`)
