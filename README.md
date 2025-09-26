@@ -31,6 +31,10 @@
 
 `sail artisan migrate --seed`
 
+- Install frontend dependencies:
+
+`sail npm i`
+
 - Run frontend build:
 
 `sail npm run dev`
